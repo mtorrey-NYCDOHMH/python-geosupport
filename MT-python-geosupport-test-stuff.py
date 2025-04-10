@@ -1,14 +1,22 @@
 ## python-geosupport-test-stuff.py
-## Last modified: 2025-04-10 10:29
+## Last modified: 2025-04-10 12:54
 
 ## This stuff from python-geosupport documentation: 
 ## https://python-geosupport.readthedocs.io/en/latest/
 
-## Be sure to set environment variables first. See MT-local-lib-config-commands.sh*
-# Try setting them here (not sure if this will work):
+print("This script tests whether geosupport is working.")
+
+## Be sure to set environment variables first. 
+## NOTE: if you are running this script interactively, the setting of the envionment variables below with os.environ will not work because you have to have those environment variables set BEFORE you start python. (Geosupport is using those variables to link a library to python, and it can't do that if python is already started without the libraries linked.)
+## If you want to run this script interactively, set the environment variables in bash before you start python, using ye olde export command:
+# export LD_LIBRARY_PATH=/usr/share/R/library/geocoding_tests/version-24d_24.4/lib/
+# export GEOFILES=/usr/share/R/library/geocoding_tests/version-24d_24.4/fls/
+
+# If running this script on the command line, you can set environment variables in python line so:
 import os
-os.environ["GEOFILES"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/fls/"
-os.environ["LD_LIBRARY_PATH"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/lib/"
+os.environ["GEOFILES"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/fls"
+os.environ["LD_LIBRARY_PATH"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/lib"
+# But then you need to ...
 
 
 ## Basic usage:
