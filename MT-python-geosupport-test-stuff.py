@@ -1,27 +1,65 @@
-## python-geosupport-test-stuff.py
-## Last modified: 2025-04-10 12:54
+#!/sbin/python
+## MT-python-geosupport-test-stuff.py
+## Last modified: 2025-04-10 14:54
 
-## This stuff from python-geosupport documentation: 
-## https://python-geosupport.readthedocs.io/en/latest/
+print("This script tests whether geosupport is working. Environmental variables must be set before running, so be sure to use the wrapper script to-set-geosupport-env-vars.sh instead of running this script directly.")
+print(" ")
 
-print("This script tests whether geosupport is working.")
+## NOTE: Be sure to set environment variables first. If you are running the script on the command line, use the wrapper script, as noted in print() above.
+## NOTE: Otherwise, if you are running this script interactively (or want to run it manually stand-alone on the command line), you have set the GEOFILES and LD_LIBRARY_PATH environment variables set BEFORE you start python, using ye olde export command:
+    # export LD_LIBRARY_PATH=/usr/share/R/library/geocoding_tests/version-24d_24.4/lib/
+    # export GEOFILES=/usr/share/R/library/geocoding_tests/version-24d_24.4/fls/
 
-## Be sure to set environment variables first. 
-## NOTE: if you are running this script interactively, the setting of the envionment variables below with os.environ will not work because you have to have those environment variables set BEFORE you start python. (Geosupport is using those variables to link a library to python, and it can't do that if python is already started without the libraries linked.)
-## If you want to run this script interactively, set the environment variables in bash before you start python, using ye olde export command:
-# export LD_LIBRARY_PATH=/usr/share/R/library/geocoding_tests/version-24d_24.4/lib/
-# export GEOFILES=/usr/share/R/library/geocoding_tests/version-24d_24.4/fls/
+################################################################################
+# An alternative for setting env vars: It is possible to set environment variables in python, but because geosupport uses the linked C libraries, you have to set the env vars and then call a separate script. So as an option (suggested by ChatGPT) you could create a small python wrapper script that set the environment variables:
+#import os
+#os.environ["GEOFILES"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/fls"
+#os.environ["LD_LIBRARY_PATH"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/lib"
+## And then calls another python script that does the actual geosupport stuff with those enviornment variables set:
+#script = "MT-python-geosupport-test-stuff.py"
+#args = [script] + sys.argv[1:]
+#os.execve(sys.executable, [sys.executable] + args, os.environ)
+## Obviously, this would not work for using python interactively.
+################################################################################
 
-# If running this script on the command line, you can set environment variables in python line so:
+########################################
+# test that geosupport has it's environment variables set (and linked) and geosupport is working correctly.
 import os
-os.environ["GEOFILES"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/fls"
-os.environ["LD_LIBRARY_PATH"] = "/usr/share/R/library/geocoding_tests/version-24d_24.4/lib"
-# But then you need to ...
+import sys
 
+# Import the library and create a `Geosupport` object.
+from geosupport import Geosupport, GeosupportError
+# (This will fail if python-geosupport is not install correctly)
+
+def check_geosupport_env():
+    required_vars = ["LD_LIBRARY_PATH", "GEOFILES"]
+    missing = [var for var in required_vars if not os.environ.get(var)]
+
+    if missing:
+        print("Content-Type: text/plain\n")
+        print(f"Error: Missing required environment variable(s): {', '.join(missing)}")
+        sys.exit(1)
+
+    try:
+        gtest = Geosupport()
+        # Try a minimal address lookup to confirm it's working
+        result = gtest.address(house_number="1", street_name="Centre St", borough="Manhattan")
+        if not result or "Message" in result and "error" in result["Message"].lower():
+            raise GeosupportError("Geosupport responded with error.")
+        print("Geosupport environment variables checked, moving on...")
+        print(" ")
+    except Exception as e:
+        print("Content-Type: text/plain\n")
+        print(f"Error initializing Geosupport: {e}")
+        sys.exit(1)
+
+# Call the check function:
+check_geosupport_env()
+########################################
 
 ## Basic usage:
-# Import the library and create a `Geosupport` object.
-from geosupport import Geosupport
+## This stuff from python-geosupport documentation: 
+## https://python-geosupport.readthedocs.io/en/latest/
 g = Geosupport()
 
 # Call the address processing function by name
