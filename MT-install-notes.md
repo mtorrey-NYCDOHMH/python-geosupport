@@ -1,5 +1,5 @@
 MT-install-notes.md
-Last modified: 2024-04-23 16:50
+Last modified: 2025-04-16 16:40
 
 # MT's install notes for python-geosupport
 * This repo is forked from Ian Shiland's. Look there for the original.
@@ -15,15 +15,24 @@ There are two ways to do this depending on what you have access to on your Linux
 ### The easy way; use pip:
 * Note: setup.py as suggested by the package maintainer is both deprecated and seems to be able to only install to system, not local dir.
 * Instead, cd into the python-geosupport directory and run:
-	* ` pip3 install ./ `
-	* (pip3 on debian systems.)
-* pip will build and install the local repo package inside .local/ or wherever you keep your local python packages.
+	* `pip3 install --user ./ `
+        * (pip3 on debian systems.)
+        * For a system-wide install on a deb system, drop the --user
+    * On Arch linux use: `pip install --break-system-packages --user ./`
+        * Generally, you don't want to break-system-packages, but the --user still installs it only for you, the user. And geosupport is unlikely to conflict with a system package, so this is pretty safe. And saves you from having to worry about which python venv you are currently in.
+        * Another option is to create a venv of course, see Arch linux documentation for python.
+        * For a system-wide install on an Arch system see Arch documentation for installing system-wide python packages. Or, risk dropping both --user and --break-system-packages
+    * with --user, pip will build and install the local repo package inside .local/ or wherever you keep your local python packages.
 * pip uninstall python-geosupport will remove the package (like any other)
 
 ### The harder way; use setup.py:
 * To install on DOHMH python server (which has no pip) you need to use setup.py included with this git repo. Since you also don't have permission to install the package to the system, you have to give setup.py the local install directory through an environment variable, like so:
 	* ` export INSTALL_DIR=\$HOME/.local/ `
 	* ` python3 ./setup.py install --prefix=$INSTALL_DIR `
+
+### Or, just don't install it
+* Turns out, python adds the current working directory to it's sys.path. So if you run python on the command line from this cloned repo, it will see the `geosupport` subdirectory, and when you run `import geosupport` it will read it directly from the subdirectory.
+* Super confusing, because the package is _not_ installed on your system. Python reads the package with no warning or notice. But when you go to use your code that depends on python-geosupport elsewhere, the package will not be available. (And you still have to manage your environment variables!)
 
 ## 2. Install geosupport
 * Just download the latest Linux version from NYC DCP's Bytes of the Big Apple.
