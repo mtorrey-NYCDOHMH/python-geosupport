@@ -1,5 +1,5 @@
 MT-install-notes.md
-Last modified: 2025-04-16 16:40
+Last modified: 2025-04-17 10:33
 
 # MT's install notes for python-geosupport
 * This repo is forked from Ian Shiland's. Look there for the original.
@@ -33,6 +33,7 @@ There are two ways to do this depending on what you have access to on your Linux
 ### Or, just don't install it
 * Turns out, python adds the current working directory to it's sys.path. So if you run python on the command line from this cloned repo, it will see the `geosupport` subdirectory, and when you run `import geosupport` it will read it directly from the subdirectory.
 * Super confusing, because the package is _not_ installed on your system. Python reads the package with no warning or notice. But when you go to use your code that depends on python-geosupport elsewhere, the package will not be available. (And you still have to manage your environment variables!)
+    * You can check if the package was pip installed with `python -m pip show geosupport` (or maybe it's python-geosupport, try them both.) If this says no package found, then it is not installed with pip (and if geosupport is working anyway, that's because you ran python from the directory with the geosupport package in it). 
 
 ## 2. Install geosupport
 * Just download the latest Linux version from NYC DCP's Bytes of the Big Apple.
