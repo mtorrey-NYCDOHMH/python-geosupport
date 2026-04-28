@@ -1,5 +1,8 @@
 # python-geosupport 
 
+2026-04-28 14:30 Mark Torrey says: archiving this fork because it fell behind Ian's by quite a bit. I don't believe there is anything useful left in either of the branches here, but just in case there is, I'm keeping it archived. For future python-geosupport use Ian's repo.
+
+
 [![Build status](https://ci.appveyor.com/api/projects/status/5uocynec8e3maeeq?svg=true&branch=master)](https://ci.appveyor.com/project/ishiland/python-geosupport) [![PyPI version](https://img.shields.io/pypi/v/python-geosupport.svg)](https://pypi.python.org/pypi/python-geosupport/) [![Python 2.7 | 3.4+](https://img.shields.io/badge/python-2.7%20%7C%203.4+-blue.svg)](https://www.python.org/downloads/release/python-360/) 
 
 
